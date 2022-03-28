@@ -2,7 +2,7 @@
   "scripts": {
     "compile": "npx tsc",
     "watch": "npx tsc --watch",
-    "jlox": "node ./dist/index.js"
+    "jslox": "node ./dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",

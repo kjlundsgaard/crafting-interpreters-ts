@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { createInterface } from "readline";
+import { Scanner } from "./Scanner";
 
 export class Lox {
   hadError: boolean;
@@ -47,11 +48,11 @@ export class Lox {
   }
 
   run(source: string | Buffer) {
-    // const scanner = new Scanner(source)
-    // const tokens = scanner.scanTokens()
-    // tokens.forEach((token) => {
-    // console.log(token);
-    // })
+    const scanner = new Scanner(source.toString());
+    const tokens = scanner.scanTokens();
+    tokens.forEach((token) => {
+      console.log(token.toString());
+    });
   }
 
   error(line: number, message: string) {
