@@ -1,0 +1,14 @@
+print "hello"
+
+/*
+this
+is
+a 
+/*
+nested
+*/
+multi
+line
+comment
+*/
+print "we did it"

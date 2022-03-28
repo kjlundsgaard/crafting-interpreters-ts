@@ -114,9 +114,12 @@ export class Scanner {
       case "/":
         if (this.match("/")) {
           // A comment goes until the end of the line
-          while (this.peek() != "\n" && !this.isAtEnd()) {
+          while (this.peek() !== "\n" && !this.isAtEnd()) {
             this.advance();
           }
+        } else if (this.match("*")) {
+          // A block comment can be multi-line
+          this.scanMultiLineComment();
         } else {
           this.addToken(TokenType.SLASH, null);
         }
@@ -142,6 +145,28 @@ export class Scanner {
           this.lox.error(this.line, "Unexpected character.");
         }
     }
+  }
+
+  scanMultiLineComment() {
+    while (
+      !(this.peek() === "*" && this.peekNext() === "/") &&
+      !this.isAtEnd()
+    ) {
+      if (this.peek() === "\n") {
+        this.line++;
+      } else if (this.peek() === "/" && this.peekNext() === "*") {
+        this.advance();
+        this.advance();
+        this.scanMultiLineComment();
+      }
+      this.advance();
+    }
+    if (!this.isAtEnd()) {
+      this.advance();
+      this.advance();
+      return;
+    }
+    return;
   }
 
   isAtEnd(): boolean {
@@ -183,7 +208,7 @@ export class Scanner {
     if (this.current + 1 >= this.source.length) {
       return "\0";
     }
-    return this.source[this.current + 1];
+    return this.source.charAt(this.current + 1);
   }
 
   string() {
