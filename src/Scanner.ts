@@ -2,11 +2,6 @@ import { Lox } from "./Lox";
 import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
-const keywords = {
-  and: TokenType.AND,
-  class: TokenType.CLASS,
-};
-
 export class Scanner {
   source: string;
   tokens: Token[];
