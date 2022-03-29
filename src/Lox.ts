@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { createInterface } from "readline";
+import { red } from "cli-color";
 import { Scanner } from "./Scanner";
 
 export class Lox {
@@ -40,15 +41,13 @@ export class Lox {
     process.stdout.write("> ");
     readline.on("line", (line) => {
       this.run(line);
-      this.error(1, line);
-      // console.log(`you typed ${line}`);
       this.hadError = false;
       process.stdout.write("> ");
     });
   }
 
   run(source: string | Buffer) {
-    const scanner = new Scanner(source.toString());
+    const scanner = new Scanner(source.toString(), this);
     const tokens = scanner.scanTokens();
     tokens.forEach((token) => {
       console.log(token.toString());
@@ -60,7 +59,7 @@ export class Lox {
   }
 
   report(line: number, where: string, message: string) {
-    process.stderr.write(`[line ${line}] Error ${where}: ${message}\n`);
+    process.stderr.write(red(`[line ${line}] Error ${where}: ${message}\n`));
     this.hadError = true;
   }
 }

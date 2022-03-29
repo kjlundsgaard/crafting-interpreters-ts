@@ -11,13 +11,13 @@ export class Scanner {
   lox: Lox;
   keywords: Map<string, TokenType>;
 
-  constructor(source: string) {
+  constructor(source: string, lox: Lox) {
     this.source = source;
     this.tokens = [];
     this.start = 0;
     this.current = 0;
     this.line = 1;
-    this.lox = new Lox();
+    this.lox = lox;
     this.keywords = new Map();
     this.keywords.set("and", TokenType.AND);
     this.keywords.set("class", TokenType.CLASS);
