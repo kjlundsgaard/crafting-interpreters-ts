@@ -4,17 +4,6 @@ export type Expression = {
   accept: (visitor: Visitor) => any;
 };
 
-export type BinaryInput = {
-  left: Expression;
-  operator: Token;
-  right: Expression;
-};
-
-export type UnaryInput = {
-  operator: Token;
-  right: Expression;
-};
-
 export type Visitor = {
   visitBinary: (expr: Binary) => void;
   visitGrouping: (expr: Grouping) => void;
@@ -22,19 +11,21 @@ export type Visitor = {
   visitUnary: (expr: Unary) => void;
 };
 
+type LiteralType = number | string | boolean | null;
+
 export class Binary implements Expression {
   left: Expression;
   operator: Token;
   right: Expression;
 
-  constructor(input: BinaryInput) {
-    this.left = input.left;
-    this.operator = input.operator;
-    this.right = input.right;
+  constructor(left: Expression, operator: Token, right: Expression) {
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitBinary(this);
+    return visitor.visitBinary(this);
   }
 }
 
@@ -46,19 +37,19 @@ export class Grouping implements Expression {
   }
 
   accept(visitor: Visitor) {
-    visitor.visitGrouping(this);
+    return visitor.visitGrouping(this);
   }
 }
 
 export class Literal implements Expression {
-  value: Token;
+  value: LiteralType;
 
-  constructor(value: Token) {
+  constructor(value: LiteralType) {
     this.value = value;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitLiteral(this);
+    return visitor.visitLiteral(this);
   }
 }
 
@@ -66,12 +57,12 @@ export class Unary implements Expression {
   operator: Token;
   right: Expression;
 
-  constructor(input: UnaryInput) {
-    this.operator = input.operator;
-    this.right = input.right;
+  constructor(operator: Token, right: Expression) {
+    this.operator = operator;
+    this.right = right;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitUnary(this);
+    return visitor.visitUnary(this);
   }
 }

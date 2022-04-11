@@ -9,7 +9,7 @@ export class AstPrinter implements Visitor {
   }
 
   visitGrouping(expr: Grouping) {
-    return this.parenthesize("group", expr);
+    return this.parenthesize("group", expr.expression);
   }
 
   visitLiteral(expr: Literal) {
