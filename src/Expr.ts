@@ -1,8 +1,8 @@
 import { Token } from "./Token";
 
-export interface ExpressionInterface {
-  accept: (visitor: Visitor) => void;
-}
+export type Expression = {
+  accept: (visitor: Visitor) => any;
+};
 
 export type BinaryInput = {
   left: Expression;
@@ -16,74 +16,62 @@ export type UnaryInput = {
 };
 
 export type Visitor = {
-  visitBinary: () => void;
-  visitGrouping: () => void;
-  visitLiteral: () => void;
-  visitUnary: () => void;
+  visitBinary: (expr: Binary) => void;
+  visitGrouping: (expr: Grouping) => void;
+  visitLiteral: (expr: Literal) => void;
+  visitUnary: (expr: Unary) => void;
 };
 
-export class Expression {
-  type: string;
-  constructor() {
-    // is this really necessary? unclear yet
-    this.type = "Expression";
-  }
-}
-
-export class Binary extends Expression implements ExpressionInterface {
+export class Binary implements Expression {
   left: Expression;
   operator: Token;
   right: Expression;
 
   constructor(input: BinaryInput) {
-    super();
     this.left = input.left;
     this.operator = input.operator;
     this.right = input.right;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitBinary();
+    visitor.visitBinary(this);
   }
 }
 
-export class Grouping extends Expression {
+export class Grouping implements Expression {
   expression: Expression;
 
   constructor(expression: Expression) {
-    super();
     this.expression = expression;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitGrouping();
+    visitor.visitGrouping(this);
   }
 }
 
-export class Literal extends Expression implements ExpressionInterface {
+export class Literal implements Expression {
   value: Token;
 
   constructor(value: Token) {
-    super();
     this.value = value;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitLiteral();
+    visitor.visitLiteral(this);
   }
 }
 
-export class Unary extends Expression implements ExpressionInterface {
+export class Unary implements Expression {
   operator: Token;
   right: Expression;
 
   constructor(input: UnaryInput) {
-    super();
     this.operator = input.operator;
     this.right = input.right;
   }
 
   accept(visitor: Visitor) {
-    visitor.visitUnary;
+    visitor.visitUnary(this);
   }
 }
